@@ -76,8 +76,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   getBatteryLevel(List<String> list) {
     setState(() {
       prev = batteryLevel;
-      // batteryLevel = 100;
-      batteryLevel = double.parse(list[0]);
+      batteryLevel = 80;
+      // batteryLevel = double.parse(list[0]);
       chargingTimeLeft = int.parse(list[1]).toDouble();
       chargingTimeLeft =
           (chargingTimeLeft / 3600000).toDouble().roundToDouble();

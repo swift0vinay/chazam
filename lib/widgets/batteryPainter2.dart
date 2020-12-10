@@ -1,22 +1,26 @@
 import 'dart:math';
 
+import 'package:chazam/widgets/batteryIndicator2.dart';
+import 'package:chazam/widgets/notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BatteryPainter2 extends CustomPainter {
-  Animation<double> listenable;
+  ValueNotifier<AnimationNotifier> listenable;
   Color color;
+  bool forward;
   double batteryLevel, prev;
-  BatteryPainter2({this.color, this.listenable, this.batteryLevel, this.prev})
+  BatteryPainter2(
+      {this.color, this.forward, this.listenable, this.batteryLevel, this.prev})
       : super(repaint: listenable);
   @override
   void paint(Canvas canvas, Size size) {
-    print(batteryLevel);
+    // print(wave.value);
     double h = size.height;
     double w = size.width;
-    double batteryHeight = listenable.value == 0
+    double batteryHeight = listenable.value.heightValue == 0
         ? (h * batteryLevel / 100)
-        : (h * listenable.value / 100);
+        : (h * listenable.value.heightValue / 100);
     double radius = h / 2;
     Paint paint = Paint()
       ..shader = LinearGradient(
@@ -36,8 +40,6 @@ class BatteryPainter2 extends CustomPainter {
     Offset start = Offset(w / 2, h);
     Offset left = Offset(radius - batteryWidth, h - batteryHeight);
     Offset right = Offset(radius + batteryWidth, h - batteryHeight);
-    print(
-        '$radius $batteryLevel ${radius - batteryWidth} ${radius + batteryWidth}');
     path.moveTo(start.dx, start.dy);
     if (batteryLevel != 100.0) {
       path.arcToPoint(
@@ -68,16 +70,21 @@ class BatteryPainter2 extends CustomPainter {
     } else {
       parts = 1;
     }
-
     double partDist = dist / parts;
     if (batteryLevel < 98) {
       for (int i = 1; i <= parts; i++) {
         if (i % 2 != 0)
-          path.quadraticBezierTo(left.dx + (i - 1) * partDist + partDist / 2,
-              left.dy - 10, left.dx + i * partDist, left.dy);
+          path.quadraticBezierTo(
+              left.dx + (i - 1) * partDist + partDist / 2,
+              left.dy + listenable.value.waveValue,
+              left.dx + i * partDist,
+              left.dy);
         else
-          path.quadraticBezierTo(left.dx + (i - 1) * partDist + partDist / 2,
-              left.dy + 10, left.dx + i * partDist, left.dy);
+          path.quadraticBezierTo(
+              left.dx + (i - 1) * partDist + partDist / 2,
+              left.dy - listenable.value.waveValue,
+              left.dx + i * partDist,
+              left.dy);
       }
     }
     if (batteryLevel != 100) {

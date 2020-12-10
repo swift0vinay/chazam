@@ -20,16 +20,16 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     initalize();
-    animationController =
-        new AnimationController(duration: Duration(seconds: 2), vsync: this)
-          ..repeat();
+    animationController = new AnimationController(
+        duration: Duration(milliseconds: 1000), vsync: this)
+      ..repeat();
     animation = Tween<double>(begin: 0, end: 350).animate(animationController);
     animation.addListener(() {
       setState(() {
         if (animation.status == AnimationStatus.completed) {
           completed = true;
           animationController2.forward();
-          Future.delayed(Duration(seconds: 3)).then((value) {
+          Future.delayed(Duration(seconds: 2)).then((value) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) {
               return Home();
@@ -39,9 +39,9 @@ class _SplashScreenState extends State<SplashScreen>
       });
     });
 
-    animationController2 =
-        new AnimationController(duration: Duration(seconds: 2), vsync: this)
-          ..repeat();
+    animationController2 = new AnimationController(
+        duration: Duration(milliseconds: 1000), vsync: this)
+      ..repeat();
     animation2 =
         Tween<double>(begin: 200, end: 100).animate(animationController2);
     animation2.addListener(() {
